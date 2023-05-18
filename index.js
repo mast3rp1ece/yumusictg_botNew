@@ -45,7 +45,7 @@ function getSavedChatIds() {
 //  sendMessageToAllUsers('Хай');
 
 bot.command('start', (ctx) => {
-	ctx.reply(`Привіт ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Друже'}👋 Я створив цього бота, щоб ви не забували сплачувати щомісячний платіж на підписку "Youtube Music"😉`, {
+	ctx.reply(`Привіт ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Друже'}👋 Я створив цього бота, щоб ви не забували сплачувати щомісячний платіж на підписку "Youtube Music"😉 Щомісяця, 18-го числа, вам буде приходити сповіщення(нагадування) про оплату😊`, {
 		 reply_markup: {
 			  keyboard: [
 				['💰Оплата']
@@ -87,7 +87,7 @@ bot.command('payment', async (ctx)=> {
 })
 
 bot.on(message('text'), async (ctx) => {
-	await ctx.replyWithHTML(`${ctx.message.from.first_name ? ctx.message.from.first_name : 'Друже'}, я тебе не зрозумів🥺 Будь ласка обери конкретну дію😃`);
+	await ctx.replyWithHTML(`${ctx.message.from.first_name ? ctx.message.from.first_name : 'Друже'}, я тебе не зрозумів🥺 Будь ласка обери "Оплата" в меню😃`);
  })
 
 function addActionBot(name, src, text) {
@@ -115,7 +115,7 @@ async function sendMonthlyMessage(chatId) {
   try {
     const chatMember = await bot.telegram.getChatMember(chatId, chatId);
     if (chatMember.status !== 'left' && chatMember.status !== 'kicked') {
-      const message = 'Привіт👋, це щомісячне нагадування про оплату користуванням "Youtube Misuc" у розмірі - "20грн"🤑';
+      const message = 'Привіт👋, це щомісячне нагадування про оплату користуванням "Youtube Misuc" у розмірі - "20грн"🤑 Рома, в тебе - "40грн"';
       await bot.telegram.sendMessage(chatId, message);
     }
   } catch (error) {
@@ -137,7 +137,7 @@ function sendMonthlyMessagesToAllUsers() {
 	});
 }
 
-cron.schedule("50 17 18 * *", () => {
+cron.schedule("0 12 18 * *", () => {
 	sendMonthlyMessagesToAllUsers();
 }, {
 	scheduled: true,
