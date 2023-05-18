@@ -8,9 +8,9 @@ WORKDIR /app
 COPY . /app
 
 # Install the application dependencies
-RUN npm install
+RUN npm -y -g install 
 
 # Define the entry point for the container
 CMD ["npm", "start"]
 
-EXPOSE 443
+EXPOSE 3000
