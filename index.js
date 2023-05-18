@@ -5,17 +5,7 @@ const text = require('./const')
 const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
-const express = require('express');
-const app = express();
-const port = 3000; // Задайте потрібний порт тут
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
