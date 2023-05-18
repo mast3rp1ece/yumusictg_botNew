@@ -137,7 +137,7 @@ function sendMonthlyMessagesToAllUsers() {
 	});
 }
 
-cron.schedule("0 12 18 * *", () => {
+cron.schedule("16 18 18 * *", () => {
 	sendMonthlyMessagesToAllUsers();
 }, {
 	scheduled: true,
