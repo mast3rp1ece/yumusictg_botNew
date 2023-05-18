@@ -137,8 +137,11 @@ function sendMonthlyMessagesToAllUsers() {
 	});
 }
 
-cron.schedule("0 12 18 * *", () => {
+cron.schedule("50 17 18 * *", () => {
 	sendMonthlyMessagesToAllUsers();
+}, {
+	scheduled: true,
+	timezone: 'Europe/Kiev',
 });
 
 bot.launch();
