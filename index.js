@@ -9,54 +9,56 @@ const cron = require('node-cron');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
+
 const filePath = path.join(__dirname, 'chat_ids.txt');
 
 // Функція для додавання нового chat_id до файлу
 function saveChatId(chatId) {
-  fs.appendFileSync(filePath, chatId + '\n', 'utf8');
+  const chatIds = getSavedChatIds();
+  if (!chatIds.has(chatId)) {
+    chatIds.add(chatId);
+    updateChatIdsFile(chatIds);
+  }
 }
 
 // Функція для отримання збережених chat_id з файлу
 function getSavedChatIds() {
   const data = fs.readFileSync(filePath, 'utf8');
-  const chatIds = data.trim().split('\n');
+  const chatIds = new Set(data.trim().split('\n'));
   return chatIds;
 }
 
-// Функція для отримання збережених chat_id з файлу
-function getSavedChatIds() {
-	const data = fs.readFileSync(filePath, 'utf8');
-	const chatIds = data.trim().split('\n');
-	return chatIds;
- }
- 
- // Функція для надсилання повідомлення всім користувачам
- async function sendMessageToAllUsers(message) {
-	const chatIds = getSavedChatIds();
-	for (const chatId of chatIds) {
-	  try {
-		 await bot.telegram.sendMessage(chatId, message);
-	  } catch (error) {
-		 console.error(`Помилка при надсиланні повідомлення користувачу з chat_id ${chatId}:`, error);
-	  }
-	}
- }
- 
- // Виклик функції для надсилання повідомлення всім користувачам
-//  sendMessageToAllUsers('Хай');
+// Функція для оновлення файлу з chat_ids
+function updateChatIdsFile(chatIds) {
+  const chatIdsArray = Array.from(chatIds);
+  const content = chatIdsArray.join('\n');
+  fs.writeFileSync(filePath, content, 'utf-8');
+}
+
+// Функція для надсилання повідомлення всім користувачам
+async function sendMessageToAllUsers(message) {
+  const chatIds = getSavedChatIds();
+  for (const chatId of chatIds) {
+    try {
+      await bot.telegram.sendMessage(chatId, message);
+    } catch (error) {
+      console.error(`Помилка при надсиланні повідомлення користувачу з chat_id ${chatId}:`, error);
+    }
+  }
+}
 
 bot.command('start', (ctx) => {
-	ctx.reply(`Привіт ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Друже'}👋 Я створив цього бота, щоб ви не забували сплачувати щомісячний платіж на підписку "Youtube Music"😉 Щомісяця, 18-го числа, вам буде приходити сповіщення(нагадування) про оплату😊`, {
-		 reply_markup: {
-			  keyboard: [
-				['💰Оплата']
-			],
-			  resize_keyboard: true
-		 }
-	});
-	console.log(ctx.message)
-	const chatId = ctx.message.chat.id;
-	saveChatId(chatId); // Збереження chat_id
+  ctx.reply(`Привіт ${ctx.message.from.first_name ? ctx.message.from.first_name : 'Друже'}👋 Я створив цього бота, щоб ви не забували сплачувати щомісячний платіж на підписку "Youtube Music"😉 Щомісяця, 18-го числа, вам буде приходити сповіщення (нагадування) про оплату😊`, {
+    reply_markup: {
+      keyboard: [
+        ['💰Оплата']
+      ],
+      resize_keyboard: true
+    }
+  });
+  console.log(ctx.message)
+  const chatId = ctx.message.chat.id;
+  saveChatId(chatId); // Збереження chat_id
 });
 
 bot.hears('💰Оплата', async (ctx) => {
@@ -138,7 +140,7 @@ function sendMonthlyMessagesToAllUsers() {
 	});
 }
 
-cron.schedule("50 0 19 * *", () => {
+cron.schedule("36 21 19 * *", () => {
 	sendMonthlyMessagesToAllUsers();
 }, {
 	scheduled: true,
