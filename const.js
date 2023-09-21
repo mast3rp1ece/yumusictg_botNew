@@ -11,7 +11,7 @@ const raiff = `
 `
 
 const contact = `
-<a href='https://t.me/zoacs22'>Мій Telegram</a>
+<a href='https://t.me/mast3rp1ece'>Мій Telegram</a>
 `
 module.exports.commands = commands
 module.exports.mono = mono
