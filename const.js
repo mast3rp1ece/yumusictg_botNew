@@ -4,7 +4,7 @@ const commands = `
 /payment - Оплата
 `
 const mono = `
-5375414120660716
+<a href='https://send.monobank.ua/4jn4xtw9jj'>Посилання на платіж</a>
 `
 const raiff = `
 4149510064266390
